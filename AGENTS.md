@@ -1,205 +1,97 @@
-# NeMo AutoModel -- Guide for AI Agents
+# AI Agent Instructions
 
-NeMo AutoModel is a PyTorch-native training framework for LLMs, VLMs, diffusion
-models, and retrieval models. It integrates with HuggingFace Transformers via
-custom `NeMoAuto*` wrapper classes, uses YAML-driven recipe configs, and relies
-on FSDP2/HSDP/DDP/DTensor/DeepEP for distributed training.
+## Project: Automodel
 
-This document is the top-level reference for any AI agent working in this
-repository. Read it first, then consult the relevant skill file for the task at
-hand.
+## 🚨 CRITICAL: Before ANY Task
 
----
+**STOP and check these first:**
 
-## Coding Style
+1. **Discover context** → Use `board` tool to see project state
+2. **Search for related work** → Use `search` tool before creating new specs
+3. **Never create files manually** → Always use `create` tool for new specs
 
-- **Explicit over implicit.** Inline logic where possible; avoid hiding behavior
-  behind unnecessary layers of indirection.
-- **No speculative abstractions.** Do not add features, parameters, or
-  generalization beyond what is explicitly asked for.
-- **Formatter:** `ruff` with a line length of 120 and double quotes.
-  Run `ruff format .` then `ruff check --fix .` before committing.
-- **Type hints** are required on all public API signatures (functions, methods,
-  class attributes exposed in `__init__.py`).
-- **Docstrings** follow Google style.
-- **Optional dependencies** must be guarded with `safe_import()` from
-  `nemo_automodel.shared.import_utils`. Never let an optional import crash
-  module loading.
-- **Copyright header.** Every Python file must start with the NVIDIA copyright
-  block. Do not remove or modify it.
-- **Package management.** The project uses `uv`. Do not introduce `pip install`
-  commands in scripts or docs, instead use `uv`.
-- **Python version.** 3.10+ required. PyTorch 2.6+.
+> **Why?** Skipping discovery creates duplicate work. Manual file creation breaks LeanSpec tooling.
 
----
+## 🔧 Managing Specs
 
-## Architecture Overview
+### MCP Tools (Preferred) with CLI Fallback
+
+| Action | MCP Tool | CLI Fallback |
+|--------|----------|--------------|
+| Project status | `board` | `lean-spec board` |
+| List specs | `list` | `lean-spec list` |
+| Search specs | `search` | `lean-spec search "query"` |
+| View spec | `view` | `lean-spec view <spec>` |
+| Create spec | `create` | `lean-spec create <name>` |
+| Update spec | `update` | `lean-spec update <spec> --status <status>` |
+| Link specs | `link` | `lean-spec link <spec> --depends-on <other>` |
+| Unlink specs | `unlink` | `lean-spec unlink <spec> --depends-on <other>` |
+| Dependencies | `deps` | `lean-spec deps <spec>` |
+| Token count | `tokens` | `lean-spec tokens <spec>` |
+
+## ⚠️ Core Rules
+
+| Rule | Details |
+|------|---------|
+| **NEVER edit frontmatter manually** | Use `update`, `link`, `unlink` for: `status`, `priority`, `tags`, `assignee`, `transitions`, timestamps, `depends_on` |
+| **ALWAYS link spec references** | Content mentions another spec → `lean-spec link <spec> --depends-on <other>` |
+| **Track status transitions** | `planned` → `in-progress` (before coding) → `complete` (after done) |
+| **No nested code blocks** | Use indentation instead |
+
+### 🚫 Common Mistakes
+
+| ❌ Don't | ✅ Do Instead |
+|----------|---------------|
+| Create spec files manually | Use `create` tool |
+| Skip discovery | Run `board` and `search` first |
+| Leave status as "planned" | Update to `in-progress` before coding |
+| Edit frontmatter manually | Use `update` tool |
+
+## 📋 SDD Workflow
 
 ```
-automodel <command> <domain> -c <config.yaml>
-    |
-    v
-_cli/app.py          -- routes command + domain to recipe scripts
-    |
-    v
-recipes/             -- main training / eval entry points
-  llm/
-  vlm/
-  diffusion/
-  retrieval/
-    |
-    v
-components/          -- modular building blocks
-  models/            -- 27+ model families (LLM, VLM, MoE, ...)
-  datasets/          -- LLM, VLM, diffusion data pipelines
-  distributed/       -- FSDP2, HSDP, DDP utilities
-  checkpoint/        -- async DCP, SafeTensors
-  quantization/      -- FP8, QAT, calibration
-  _peft/             -- LoRA, QLoRA adapters
-  launcher/          -- Slurm, SkyPilot job submission
-    |
-    v
-_transformers/       -- HuggingFace bridge
-  auto_model.py      -- NeMoAutoModelForCausalLM, NeMoAutoModelForImageTextToText, ...
-  registry.py        -- MODEL_ARCH_MAPPING (model registration)
-  capabilities.py    -- per-model feature detection flags
-  infrastructure.py  -- device mesh setup for distributed training
-
-_diffusers/          -- diffusion pipeline wrapper
-  NeMoAutoDiffusionPipeline
+BEFORE: board → search → check existing specs
+DURING: update status to in-progress → code → document decisions → link dependencies
+AFTER:  update status to complete → document learnings
 ```
 
-### Entry Point
+**Status tracks implementation, NOT spec writing.**
 
-`_cli/app.py` parses `automodel <command> <domain>` and dispatches to the
-matching recipe script. The `-c` flag points to a YAML config that drives all
-component construction.
+## Spec Dependencies
 
-### Recipes
+Use `depends_on` to express blocking relationships between specs:
+- **`depends_on`** = True blocker, work order matters, directional (A depends on B)
 
-Files under `recipes/` are the primary training entry points. Each recipe
-assembles a model, optimizer, dataloader, and trainer from its YAML config,
-then runs the training loop.
-
-### Components
-
-Everything under `components/` is a self-contained building block. Components
-are composed by recipes, never by each other (no hidden cross-component
-imports).
-
-### Transformers Bridge
-
-`_transformers/` is the integration layer with HuggingFace:
-
-- `auto_model.py` -- defines the `NeMoAuto*` classes that wrap
-  `PreTrainedModel` with NeMo-specific functionality (distributed init,
-  checkpoint hooks, backend dispatch).
-- `registry.py` -- `MODEL_ARCH_MAPPING` maps architecture strings to model
-  classes. Every new model must be registered here.
-- `capabilities.py` -- declares per-model feature flags (supports_fp8,
-  supports_moe, has_combined_qkv, etc.). These flags drive conditional logic
-  throughout the framework.
-- `infrastructure.py` -- builds the device mesh for FSDP2/HSDP and manages
-  process-group lifecycle.
-
-### Diffusers Bridge
-
-`_diffusers/` wraps HuggingFace diffusion pipelines via
-`NeMoAutoDiffusionPipeline`, providing the same recipe-driven config and
-distributed training interface used by LLM/VLM recipes.
-
----
-
-## Model Conventions
-
-### Directory Layout
-
-Each model lives under `components/models/<name>/` and contains:
-
-| File                    | Purpose                                           |
-|-------------------------|---------------------------------------------------|
-| `model.py`             | Model class (inherits `PreTrainedModel` + `HFCheckpointingMixin`) |
-| `state_dict_adapter.py`| Weight key mapping between HF and NeMo formats    |
-| `config.py` (optional) | Custom config class if HF config is insufficient  |
-| `layers.py` (optional) | Custom layer implementations                      |
-| `rope_utils.py` (optional) | Model-specific RoPE variants                  |
-
-### Inheritance
-
-- All models inherit from `PreTrainedModel` and `HFCheckpointingMixin`.
-- MoE models additionally inherit `MoEFSDPSyncMixin` for correct expert
-  gradient synchronization under FSDP2.
-
-### Registration
-
-Every model must be added to `MODEL_ARCH_MAPPING` in
-`_transformers/registry.py`. Without this entry the `NeMoAuto*` classes will
-not find the model.
-
-### Combined Projections
-
-Combined projections (fused QKV, fused GateUp) use **interleaved layout** so
-that tensor-parallel sharding splits evenly across heads/experts. Do not change
-the interleave order without understanding the TP implications.
-
-### Backend System
-
-`BackendConfig` controls which kernel implementations are used for attention,
-linear layers, normalization, RoPE, and expert dispatch. Backend selection is
-set in the YAML config and threaded through model construction; individual
-layers should never hard-code a backend choice.
-
----
-
-## Config Pattern
-
-### YAML and `_target_`
-
-All YAML configs use the `_target_` key to specify the Python class or function
-to instantiate. This is the same pattern used by Hydra/OmegaConf:
-
-```yaml
-model:
-  _target_: nemo_automodel.components.models.llama.model.LlamaForCausalLM
-  config:
-    hidden_size: 4096
-    num_attention_heads: 32
+Link dependencies when one spec builds on another:
+```bash
+lean-spec link <spec> --depends-on <other-spec>
 ```
 
-### Dataclass Configs
+## When to Use Specs
 
-Every component config is a Python dataclass that exposes `to_dict()` and
-`from_dict()` for serialization round-tripping. When adding a new config field,
-always provide a default value and add it to both methods.
+| ✅ Write spec | ❌ Skip spec |
+|---------------|--------------|
+| Multi-part features | Bug fixes |
+| Breaking changes | Trivial changes |
+| Design decisions | Self-explanatory refactors |
 
-### Recipe Builder Functions
+## Token Thresholds
 
-Recipes use a standard set of builder functions to construct components from
-config dicts:
+| Tokens | Status |
+|--------|--------|
+| <2,000 | ✅ Optimal |
+| 2,000-3,500 | ✅ Good |
+| 3,500-5,000 | ⚠️ Consider splitting |
+| >5,000 | 🔴 Must split |
 
-- `build_model()` -- instantiate and shard the model
-- `build_optimizer()` -- create optimizer and LR scheduler
-- `build_dataloader()` -- set up dataset, sampler, and DataLoader
-- `build_trainer()` -- assemble the training loop
+## First Principles (Priority Order)
 
-These builders read their parameters from the YAML config. Do not bypass them
-with manual construction unless there is a strong reason.
+1. **Context Economy** - <2,000 tokens optimal, >3,500 needs splitting
+2. **Signal-to-Noise** - Every word must inform a decision
+3. **Intent Over Implementation** - Capture why, let how emerge
+4. **Bridge the Gap** - Both human and AI must understand
+5. **Progressive Disclosure** - Add complexity only when pain is felt
 
 ---
 
-## Available Skills
-
-The `skills/` directory contains focused guides for common tasks. Each skill
-file gives step-by-step instructions an AI agent can follow.
-
-| # | Skill                    | Directory                  | Description                                      |
-|---|--------------------------|----------------------------|--------------------------------------------------|
-| 1 | model-onboarding         | `model-onboarding`         | Onboard a new LLM, VLM, OMNI, MoE, dLLM, text-to-image, text-to-video model family     |
-| 2 | developer-guide          | `developer-guide`          | Environment setup and day-to-day dev workflow     |
-| 3 | recipe-development       | `recipe-development`       | Create and modify training/eval recipes           |
-| 4 | distributed-training     | `distributed-training`     | FSDP2, HSDP, pipeline parallelism, context parallelism |
-| 5 | parity-testing           | `parity-testing`           | Verify numerical correctness against reference implementations |
-| 6 | launcher-config          | `launcher-config`          | Slurm and SkyPilot job submission setup           |
-
-When starting a task, identify which skill applies and read that file for
-domain-specific guidance before writing any code.
+**Remember:** LeanSpec tracks what you're building. Keep specs in sync with your work!
