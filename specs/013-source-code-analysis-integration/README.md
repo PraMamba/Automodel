@@ -9,7 +9,20 @@ tags:
   - distributed-training
 priority: medium
 created_at: '2026-01-07T09:59:33.533Z'
-updated_at: '2026-01-07T09:59:59.770Z'
+updated_at: '2026-01-07T10:01:16.175Z'
+depends_on:
+  - 001-nemo-axolotl-comparison
+  - 002-nemo-fsdp2-deep-dive
+  - 003-nemo-tp-implementation
+  - 004-nemo-cp-implementation
+  - 005-nemo-sp-implementation
+  - 006-nemo-pp-implementation
+  - 007-nemo-ep-deepep-implementation
+  - 008-nemo-3d-parallelism-implementation
+  - 009-distributed-checkpoint-safetensors-analysis
+  - 010-sequence-packing-implementation-analysis
+  - 011-nemo-axolotl-cp-comparison
+  - 012-nemo-axolotl-tp-comparison
 ---
 
 # source-code-analysis-integration
