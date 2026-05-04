@@ -1,0 +1,610 @@
+[
+  {
+    "source": ".claude/agents/checkpoint-expert.md",
+    "target": ".codex/agents/checkpoint-expert.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/code-verifier.md",
+    "target": ".codex/agents/code-verifier.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/distributed-expert.md",
+    "target": ".codex/agents/distributed-expert.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/launcher-expert.md",
+    "target": ".codex/agents/launcher-expert.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/model-expert.md",
+    "target": ".codex/agents/model-expert.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/moe-expert.md",
+    "target": ".codex/agents/moe-expert.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/peft-expert.md",
+    "target": ".codex/agents/peft-expert.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/planner.md",
+    "target": ".codex/agents/planner.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/recipe-expert.md",
+    "target": ".codex/agents/recipe-expert.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/agents/simple-code-reviewer.md",
+    "target": ".codex/agents/simple-code-reviewer.toml",
+    "kind": "agent",
+    "strategy": "native",
+    "status": "represented",
+    "notes": "Converted Claude Markdown agent to Codex custom-agent TOML. Claude tools/model fields are documented inside developer_instructions."
+  },
+  {
+    "source": ".claude/data/review-pr-change-types.md",
+    "target": ".codex/data/review-pr-change-types.md",
+    "kind": "data",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied support data; path references adjusted if present."
+  },
+  {
+    "source": ".claude/data/review-pr-templates.md",
+    "target": ".codex/data/review-pr-templates.md",
+    "kind": "data",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied support data; path references adjusted if present."
+  },
+  {
+    "source": ".claude/commands/create-pr.md",
+    "target": ".codex/commands/create-pr.md",
+    "kind": "command",
+    "strategy": "template",
+    "status": "represented",
+    "notes": "Migrated Claude slash command to Codex prompt-template workflow; data references rewritten to .codex/data."
+  },
+  {
+    "source": ".claude/commands/gen-commit-msg.md",
+    "target": ".codex/commands/gen-commit-msg.md",
+    "kind": "command",
+    "strategy": "template",
+    "status": "represented",
+    "notes": "Migrated Claude slash command to Codex prompt-template workflow; data references rewritten to .codex/data."
+  },
+  {
+    "source": ".claude/commands/review-pr.md",
+    "target": ".codex/commands/review-pr.md",
+    "kind": "command",
+    "strategy": "template",
+    "status": "represented",
+    "notes": "Migrated Claude slash command to Codex prompt-template workflow; data references rewritten to .codex/data."
+  },
+  {
+    "source": ".claude/rules/code-style.md",
+    "target": ".codex/rules/code-style.md",
+    "kind": "rule",
+    "strategy": "guidance",
+    "status": "represented",
+    "notes": "Migrated Claude path-scoped rule to Codex guidance document; selector metadata preserved where present."
+  },
+  {
+    "source": ".claude/rules/config-yaml.md",
+    "target": ".codex/rules/config-yaml.md",
+    "kind": "rule",
+    "strategy": "guidance",
+    "status": "represented",
+    "notes": "Migrated Claude path-scoped rule to Codex guidance document; selector metadata preserved where present."
+  },
+  {
+    "source": ".claude/rules/distributed.md",
+    "target": ".codex/rules/distributed.md",
+    "kind": "rule",
+    "strategy": "guidance",
+    "status": "represented",
+    "notes": "Migrated Claude path-scoped rule to Codex guidance document; selector metadata preserved where present."
+  },
+  {
+    "source": ".claude/rules/testing.md",
+    "target": ".codex/rules/testing.md",
+    "kind": "rule",
+    "strategy": "guidance",
+    "status": "represented",
+    "notes": "Migrated Claude path-scoped rule to Codex guidance document; selector metadata preserved where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr",
+    "target": ".codex/skills/automodel-dr",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr/SKILL.md",
+    "target": ".codex/skills/automodel-dr/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-attention",
+    "target": ".codex/skills/automodel-dr-attention",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-attention/SKILL.md",
+    "target": ".codex/skills/automodel-dr-attention/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-autonvtx",
+    "target": ".codex/skills/automodel-dr-autonvtx",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-autonvtx/SKILL.md",
+    "target": ".codex/skills/automodel-dr-autonvtx/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-checkpoint",
+    "target": ".codex/skills/automodel-dr-checkpoint",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-checkpoint/SKILL.md",
+    "target": ".codex/skills/automodel-dr-checkpoint/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-checkpoint/reference.md",
+    "target": ".codex/skills/automodel-dr-checkpoint/reference.md",
+    "kind": "skill-reference",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Reference file preserved inside migrated skill folder."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-cli",
+    "target": ".codex/skills/automodel-dr-cli",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-cli/SKILL.md",
+    "target": ".codex/skills/automodel-dr-cli/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-config",
+    "target": ".codex/skills/automodel-dr-config",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-config/SKILL.md",
+    "target": ".codex/skills/automodel-dr-config/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-datasets",
+    "target": ".codex/skills/automodel-dr-datasets",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-datasets/SKILL.md",
+    "target": ".codex/skills/automodel-dr-datasets/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-datasets/reference.md",
+    "target": ".codex/skills/automodel-dr-datasets/reference.md",
+    "kind": "skill-reference",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Reference file preserved inside migrated skill folder."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-diffusers",
+    "target": ".codex/skills/automodel-dr-diffusers",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-diffusers/SKILL.md",
+    "target": ".codex/skills/automodel-dr-diffusers/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-distributed",
+    "target": ".codex/skills/automodel-dr-distributed",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-distributed/SKILL.md",
+    "target": ".codex/skills/automodel-dr-distributed/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-distributed/reference.md",
+    "target": ".codex/skills/automodel-dr-distributed/reference.md",
+    "kind": "skill-reference",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Reference file preserved inside migrated skill folder."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-launcher",
+    "target": ".codex/skills/automodel-dr-launcher",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-launcher/SKILL.md",
+    "target": ".codex/skills/automodel-dr-launcher/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-loggers",
+    "target": ".codex/skills/automodel-dr-loggers",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-loggers/SKILL.md",
+    "target": ".codex/skills/automodel-dr-loggers/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-loss",
+    "target": ".codex/skills/automodel-dr-loss",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-loss/SKILL.md",
+    "target": ".codex/skills/automodel-dr-loss/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-models",
+    "target": ".codex/skills/automodel-dr-models",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-models/SKILL.md",
+    "target": ".codex/skills/automodel-dr-models/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-models/reference.md",
+    "target": ".codex/skills/automodel-dr-models/reference.md",
+    "kind": "skill-reference",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Reference file preserved inside migrated skill folder."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-moe",
+    "target": ".codex/skills/automodel-dr-moe",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-moe/SKILL.md",
+    "target": ".codex/skills/automodel-dr-moe/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-optim",
+    "target": ".codex/skills/automodel-dr-optim",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-optim/SKILL.md",
+    "target": ".codex/skills/automodel-dr-optim/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-peft",
+    "target": ".codex/skills/automodel-dr-peft",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-peft/SKILL.md",
+    "target": ".codex/skills/automodel-dr-peft/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-quantization",
+    "target": ".codex/skills/automodel-dr-quantization",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-quantization/SKILL.md",
+    "target": ".codex/skills/automodel-dr-quantization/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-recipes-biencoder",
+    "target": ".codex/skills/automodel-dr-recipes-biencoder",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-recipes-biencoder/SKILL.md",
+    "target": ".codex/skills/automodel-dr-recipes-biencoder/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-recipes-llm",
+    "target": ".codex/skills/automodel-dr-recipes-llm",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-recipes-llm/SKILL.md",
+    "target": ".codex/skills/automodel-dr-recipes-llm/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-recipes-llm/reference.md",
+    "target": ".codex/skills/automodel-dr-recipes-llm/reference.md",
+    "kind": "skill-reference",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Reference file preserved inside migrated skill folder."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-recipes-vlm",
+    "target": ".codex/skills/automodel-dr-recipes-vlm",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-recipes-vlm/SKILL.md",
+    "target": ".codex/skills/automodel-dr-recipes-vlm/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-shared",
+    "target": ".codex/skills/automodel-dr-shared",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-shared/SKILL.md",
+    "target": ".codex/skills/automodel-dr-shared/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-training",
+    "target": ".codex/skills/automodel-dr-training",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-training/SKILL.md",
+    "target": ".codex/skills/automodel-dr-training/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-transformers",
+    "target": ".codex/skills/automodel-dr-transformers",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-transformers/SKILL.md",
+    "target": ".codex/skills/automodel-dr-transformers/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-transformers/reference.md",
+    "target": ".codex/skills/automodel-dr-transformers/reference.md",
+    "kind": "skill-reference",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Reference file preserved inside migrated skill folder."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-utils",
+    "target": ".codex/skills/automodel-dr-utils",
+    "kind": "skill-folder",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Copied Codex-compatible skill folder; .claude/skills self-references rewritten to .codex/skills where present."
+  },
+  {
+    "source": ".claude/skills/automodel-dr-utils/SKILL.md",
+    "target": ".codex/skills/automodel-dr-utils/SKILL.md",
+    "kind": "skill",
+    "strategy": "copy-compatible",
+    "status": "represented",
+    "notes": "Skill definition preserved inside migrated skill folder; .claude/skills self-references rewritten where present."
+  },
+  {
+    "source": ".claude/hooks/check-expert-update.sh",
+    "target": null,
+    "kind": "hook",
+    "strategy": "omitted",
+    "status": "omitted",
+    "notes": "Executable hooks are explicitly out of scope. Source behavior is documented in .codex/README.md."
+  },
+  {
+    "source": ".claude/settings.json",
+    "target": null,
+    "kind": "settings",
+    "strategy": "omitted",
+    "status": "omitted",
+    "notes": "Claude settings are not migrated as executable Codex policy. Relevant omissions are documented in .codex/README.md."
+  },
+  {
+    "source": ".claude/settings.local.json",
+    "target": null,
+    "kind": "settings",
+    "strategy": "omitted",
+    "status": "omitted",
+    "notes": "Claude settings are not migrated as executable Codex policy. Relevant omissions are documented in .codex/README.md."
+  }
+]

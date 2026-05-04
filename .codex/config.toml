@@ -1,0 +1,103 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+# Project-scoped Codex helper config for migrated AutoModel assets.
+# This file intentionally does not enable lifecycle hooks or copy Claude permissions.
+
+[agents]
+max_threads = 6
+max_depth = 1
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-attention"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-autonvtx"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-checkpoint"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-cli"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-config"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-datasets"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-diffusers"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-distributed"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-launcher"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-loggers"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-loss"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-models"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-moe"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-optim"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-peft"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-quantization"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-recipes-biencoder"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-recipes-llm"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-recipes-vlm"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-shared"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-training"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-transformers"
+enabled = true
+
+[[skills.config]]
+path = ".codex/skills/automodel-dr-utils"
+enabled = true
