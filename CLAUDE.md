@@ -1,256 +1,201 @@
-# CLAUDE.md
+# CLAUDE.md - NeMo AutoModel
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## WHAT: Project Overview
 
-## Overview
+NeMo AutoModel is a PyTorch DTensor-native SPMD library for training and fine-tuning
+LLMs and VLMs with day-0 Hugging Face support, GPU acceleration, and memory efficiency.
 
-NeMo AutoModel is a PyTorch DTensor-native SPMD training library for LLMs and VLMs with day-0 Hugging Face support. It enables scalable training using PyTorch-native parallelism (FSDP2, TP, CP, SP, Pipeline) without model-specific rewrites.
+**Tech Stack**: Python 3.10+ | PyTorch (DTensor/FSDP2) | HuggingFace Transformers | YAML Config
 
-## Development Environment Setup
+**Core Directories**:
+
+- `nemo_automodel/` - Core package
+  - `components/` - Independent training components
+    - `config/` - YAML configuration system with `_target_` instantiation
+    - `models/` - 20+ model implementations (Llama, DeepSeek-V3, Qwen3-MoE, etc.)
+    - `datasets/` - LLM/VLM dataset loaders, sequence packing, Megatron data pipeline
+    - `distributed/` - FSDP2, MegatronFSDP, tensor/context/pipeline parallelism
+    - `checkpoint/` - Distributed checkpointing, DCP, SafeTensors, HF format conversion
+    - `loss/` - Cross-entropy, knowledge distillation, chunked CE, Triton kernels
+    - `optim/` - Optimizer creation, LR schedulers (cosine, warmup, constant)
+    - `training/` - Step scheduler, timers, signal handling, RNG state
+    - `loggers/` - W&B, MLflow, TensorBoard metric logging
+    - `attention/` - Flex attention, context parallel attention
+    - `moe/` - Mixture of Experts with DeepEP, expert parallelism
+    - `_peft/` - LoRA, QLoRA, MoE-LoRA adapters
+    - `quantization/` - FP8, QAT, QLoRA quantization
+    - `launcher/` - SLURM job submission
+    - `utils/` - Model construction, FLOPS, compile, YAML helpers
+  - `recipes/` - Training recipes
+    - `llm/` - Pretrain, SFT, KD, sequence classification
+    - `vlm/` - Vision-language model fine-tuning
+    - `biencoder/` - Contrastive biencoder training
+  - `_transformers/` - HuggingFace auto-model/tokenizer registry
+  - `_diffusers/` - Diffusion model support
+  - `_cli/` - CLI entry point (`automodel` command)
+  - `shared/` - Cross-cutting utilities (imports, patches)
+- `examples/` - Example YAML configs and training scripts
+- `tests/` - Functional and unit tests
+- `docs/` - Sphinx documentation
+
+## WHY: Purpose
+
+- Enable efficient LLM/VLM training and fine-tuning with DTensor-native SPMD
+- Provide day-0 HuggingFace model support via auto-registration
+- Composable parallelism (TP, DP, PP, CP, SP, EP) via DeviceMesh
+- Memory-efficient training with FSDP2, activation checkpointing, FP8
+
+## HOW: Core Commands
 
 ```bash
-# Setup and install dependencies
-uv venv
-uv sync --frozen --all-extras
+# Check environment
+python --version              # Requires 3.10+
+uv --version                  # Install: https://docs.astral.sh/uv/
 
-# Verify installation
-uv run python -c "import nemo_automodel; print('AutoModel ready')"
+# Sync dependencies
+uv sync --locked --extra all  # Full install
+uv sync --locked              # Minimal install
+
+# Pre-commit hooks
+pre-commit install            # Set up hooks (run once)
+pre-commit run --all-files    # Format and lint
+
+# Run tests
+python -c "import torch; print('GPU available:', torch.cuda.is_available())"
+uv run pytest tests/unit_tests/ -v
+uv run pytest tests/functional_tests/ -v  # Many require GPU
+
+# Build docs
+uv sync --group docs
+cd docs && sphinx-build . _build/html
+
+# Run training
+automodel --config examples/llm_pretrain/nanogpt_pretrain.yaml
 ```
 
-## Common Commands
+## Boundaries
 
-### Linting and Formatting
-```bash
-# Format code
-ruff check --fix .
-ruff format .
+### Constraints
 
-# Check import dependencies (components must not import each other)
-lint-imports --debug --verbose --no-cache
-```
+- Designed for distributed GPU clusters; assume containerized execution
+- Functional tests require GPU hardware; explain skips when unavailable
+- Components must not cross-import (enforced by import-linter)
 
-### Testing
+### Always Do
 
-**Run unit tests:**
-```bash
-# All unit tests
-pytest tests/unit_tests -vs
+- Read relevant files before modifying code
+- Run `pre-commit run --all-files` before committing
+- Follow existing code patterns in the same module
+- Add tests for new functionality
+- Sign commits with `--signoff` (`git commit -s`)
 
-# Specific test file
-pytest tests/unit_tests/path/to/test_file.py -vs
+### Ask First
 
-# With coverage
-coverage run --source=. -m pytest tests/unit_tests -vs
-coverage report -i
-```
+- Modifying the config system in `nemo_automodel/components/config/`
+- Adding new dependencies to `pyproject.toml`
+- Changing distributed parallelism logic
+- Deleting or renaming public APIs
+- Modifying recipe training loops
+- Running GPU/distributed tests (check GPU first:
+  `python -c "import torch; print('GPU available:', torch.cuda.is_available())"`)
 
-**Run functional tests:**
-```bash
-# Specific test suite (requires GPUs)
-pytest tests/functional_tests/hf_transformer_llm -vs
+### Never Do
 
-# With CUDA visible devices
-CUDA_VISIBLE_DEVICES=0,1 pytest tests/functional_tests/hf_peft -vs
-```
+- Hardcode secrets, paths, or endpoints
+- Skip pre-commit hooks
+- Use wildcard imports (`from x import *`)
+- Cross-import between components (enforced by import-linter)
+- Guess cluster configs or rebuild CUDA/driver stacks
+- Use underscores in Markdown filenames (use hyphens)
 
-### Running Recipes
+## Progressive Disclosure: Detailed Guides
 
-**Single GPU:**
-```bash
-uv run python examples/llm_finetune/finetune.py \
-  --config examples/llm_finetune/llama3_2/llama3_2_1b_squad.yaml
-```
+| Task                    | Reference                                                        |
+| ----------------------- | ---------------------------------------------------------------- |
+| Add Model               | `nemo_automodel/components/models/llama/`, `_transformers/registry.py` |
+| Add Dataset             | `nemo_automodel/components/datasets/`, `examples/llm_finetune/`  |
+| Add Recipe              | `nemo_automodel/recipes/base_recipe.py`, `recipes/llm/train_ft.py` |
+| Add Loss Function       | `nemo_automodel/components/loss/masked_ce.py`                    |
+| Distributed Patterns    | `nemo_automodel/components/distributed/parallelizer.py`          |
+| Checkpoint System       | `nemo_automodel/components/checkpoint/checkpointing.py`          |
+| Config System           | `nemo_automodel/components/config/loader.py`                     |
+| MoE Integration         | `nemo_automodel/components/moe/layers.py`                        |
+| PEFT/LoRA               | `nemo_automodel/components/_peft/lora.py`                        |
+| Quickstart              | `README.md`, `examples/`                                         |
+| Architecture Overview   | `docs/repository-structure.md`                                   |
+| Performance Benchmarks  | `docs/performance-summary.md`                                    |
 
-**Multi-GPU (torchrun):**
-```bash
-uv run torchrun --nproc-per-node=8 \
-  examples/llm_finetune/finetune.py \
-  --config examples/llm_finetune/llama3_2/llama3_2_1b_squad.yaml
-```
+## Git Workflow
 
-**Using automodel CLI:**
-```bash
-# Interactive multi-GPU
-uv run automodel finetune llm \
-  --nproc-per-node=8 \
-  --config examples/llm_finetune/llama3_2/llama3_2_1b_squad.yaml
+- **Commits**: Conventional Commits (`feat:`, `fix:`, `docs:`), ~72 chars subject,
+  imperative voice, reasoning in body, signed-off (`-s`)
+- **Squash**: Squash WIP commits before opening PR
+- **PR requirements**: Run pre-commit, document test coverage, note hardware limitations
 
-# SLURM cluster (requires slurm section in YAML)
-uv run automodel finetune llm \
-  --config examples/llm_finetune/llama3_2/llama3_2_1b_squad.yaml
-```
+## Extended Configuration
 
-**Override YAML parameters via CLI:**
-```bash
-uv run python examples/llm_finetune/finetune.py \
-  --config examples/llm_finetune/llama3_2/llama3_2_1b_squad.yaml \
-  --step_scheduler.local_batch_size 16 \
-  --model.pretrained_model_name_or_path meta-llama/Llama-3.2-3B
-```
+See `.claude/agents/`, `.claude/skills/`, `.claude/commands/`, and `.claude/rules/` for
+specialized instructions.
 
-## Architecture Overview
+### Agents
 
-### Three-Layer Structure
+| Agent                  | Purpose                                   | Activation Trigger                                          |
+| ---------------------- | ----------------------------------------- | ----------------------------------------------------------- |
+| `planner`              | Implementation planning                   | Before multi-file changes, new features, architectural decisions |
+| `simple-code-reviewer` | Quick code quality checks                 | After code changes, before committing                       |
+| `code-verifier`        | Formatting/linting/tests                  | After code changes, before committing                       |
+| `distributed-expert`   | FSDP2, MegatronFSDP, parallelizer, TP     | Distributed code changes or questions                       |
+| `model-expert`         | Model implementations and registration    | Model code changes or questions                             |
+| `checkpoint-expert`    | Distributed checkpointing                 | Checkpoint code changes or questions                        |
+| `moe-expert`           | Mixture of Experts integration            | MoE code changes or questions                               |
+| `peft-expert`          | LoRA/DoRA/QLoRA/MoE-LoRA                  | PEFT code changes or questions                              |
+| `recipe-expert`        | Training recipes and workflows            | Recipe code changes or questions                            |
+| `launcher-expert`      | CLI, torchrun, SLURM, multi-node          | Launch config or job submission questions                   |
 
-1. **Components** (`nemo_automodel/components/`) - Self-contained, reusable modules
-   - Each component is independent with no cross-module imports (enforced by import-linter)
-   - Examples: datasets, distributed (FSDP2, MegatronFSDP), checkpoint, loss, optim
+**Stage-by-Stage Agent Guidance**:
 
-2. **Recipes** (`nemo_automodel/recipes/`) - End-to-end training workflows
-   - `llm/train_ft.py` - LLM pretraining & fine-tuning (SFT, PEFT)
-   - `llm/kd.py` - Knowledge distillation for LLMs
-   - `vlm/finetune.py` - VLM fine-tuning (SFT, PEFT)
+1. **Planning Stage** (Before coding): Use `planner` for architecture design and
+   implementation planning
+1. **Code Formatting & Linting** (After coding): Use `code-verifier` to automatically
+   run formatting, linting, and tests
+1. **Code Quality Check** (After formatting): Use `simple-code-reviewer` for quick code
+   quality checks
 
-3. **CLI** (`nemo_automodel/_cli/`) - Job launcher for interactive and SLURM environments
+### Skills (Domain Knowledge)
 
-### Key Architectural Principles
+Skills provide deep module-level knowledge for common development tasks. See
+`.claude/skills/` for the full list of `automodel-dr-*` skills covering every component.
 
-**SPMD (Single Program, Multiple Data):**
-- Same script runs on 1 GPU or 1000+ GPUs by changing device mesh configuration
-- Parallelism is configuration, not code changes
-- Compose tensor/sequence/data/pipeline parallelism via placements
+### Commands (User-invoked Actions)
 
-**Component Independence:**
-- Components must NOT import each other (contract enforced in pyproject.toml)
-- Recipes import and compose components
-- Breaking component independence will fail CI via import-linter
+- `/create-pr` - Rebase, squash commits, and create/update PR with intelligent messages
+- `/gen-commit-msg` - Generate commit messages from staged changes
+- `/review-pr` - Intelligent PR code review with dynamic agent allocation
 
-**DTensor-Native:**
-- Uses PyTorch Distributed with `DeviceMesh` + placements (`Shard`, `Replicate`)
-- FSDP2 for memory-efficient sharding (including HSDP for multi-node)
-- Native pipeline parallelism composable with FSDP2 (3D parallelism)
+### Rules (Code Quality Standards)
 
-## Model Integration
+- `code-style.md` - Coding conventions beyond pre-commit hooks
+- `config-yaml.md` - YAML configuration and `_target_` instantiation patterns
+- `distributed.md` - Distributed training patterns and constraints
+- `testing.md` - Testing strategy and coverage requirements
 
-### Using HuggingFace Models
+## Code Intelligence & Navigation
 
-Any HF causal LM works out-of-the-box:
-```python
-# In YAML config
-model:
-  _target_: nemo_automodel.NeMoAutoModelForCausalLM.from_pretrained
-  pretrained_model_name_or_path: meta-llama/Llama-3.2-1B
-```
+When navigating and understanding code:
 
-### Custom Model Implementations
+1. **ALWAYS prefer LSP tools over text search for code relationships**:
+   - Use `goToDefinition` to jump to symbol definitions
+   - Use `findReferences` to find all usages across the codebase
+   - Use `goToImplementation` for interfaces/abstract methods
+   - Use `workspaceSymbol` to search symbols across entire project
 
-For optimized models, see `nemo_automodel/components/models/`:
-- `llama/` - Optimized Llama implementations
-- `deepseek_v3/` - DeepSeek-V3 MoE architecture
-- `qwen3_moe/`, `qwen3_omni_moe/`, `qwen3_vl_moe/` - Qwen3 MoE variants
-- `gpt_oss/` - GPT-OSS models
-- `mistral3/` - Mistral models
+2. **Use Grep/Glob/Read ONLY for**:
+   - Text/pattern searches in comments or strings
+   - Searching configuration files (JSON, YAML, etc.)
+   - Exploratory "fuzzy" searches when unsure what you're looking for
+   - Finding files by name patterns
 
-Models are registered via `_transformers/auto_model.py` and can override default HF implementations for better performance.
-
-## Configuration System
-
-**YAML-driven with CLI overrides:**
-- Base configs in `examples/llm_finetune/` and `examples/vlm_finetune/`
-- Override any nested field: `--section.subsection.field value`
-- Uses Hydra-style instantiation with `_target_` for Python objects
-
-**Key config sections:**
-- `step_scheduler` - Training loop parameters (batch size, checkpointing, validation)
-- `model` - Model selection and initialization
-- `dataset` - Dataset configuration
-- `dist_env` - Distributed environment settings
-- `slurm` - SLURM job configuration (optional)
-
-## Testing Structure
-
-**Unit tests** (`tests/unit_tests/`) - Mirror component structure:
-- Run on CPU or GPU
-- Test individual components in isolation
-- Fast, focused tests
-
-**Functional tests** (`tests/functional_tests/`) - End-to-end workflows:
-- Require GPUs
-- Test recipes and integration scenarios
-- Examples: hf_transformer_llm, hf_peft, pretrain_llm
-
-**Coverage:**
-- Tests run with coverage tracking
-- Omitted from coverage: `tests/`, `checkpoint/_backports/`, `moe/megatron/`
-
-## Important Development Constraints
-
-### Code Style
-- Line length: 120 characters
-- Quote style: double quotes
-- Linting: ruff with Google-style docstrings (D101, D103 for modules/functions)
-- Formatting: ruff format (skip magic trailing comma)
-
-### Commit Signing
-All commits MUST be signed with `git commit -s` (Developer Certificate of Origin).
-
-### Dependencies
-- Managed via `uv` (not pip)
-- Add dependencies: `uv add $DEPENDENCY`
-- Always commit `uv.lock` and `pyproject.toml` together
-- Some deps require source install for CUDA compatibility (see CONTRIBUTING.md):
-  - TransformerEngine, flash-attn, grouped_gemm, mamba, DeepEP
-
-### Container Development
-Primary development path is via Docker container:
-```bash
-# Build container
-export AUTOMODEL_INSTALL=vlm  # or: fa, moe
-export BASE_IMAGE=pytorch
-docker build -f docker/Dockerfile \
-  --build-arg AUTOMODEL_INSTALL=$AUTOMODEL_INSTALL \
-  --build-arg BASE_IMAGE=$BASE_IMAGE \
-  -t automodel --target=automodel_final .
-
-# Run container
-docker run --rm -it --runtime nvidia --gpus all automodel
-```
-
-## Key Concepts for Development
-
-### Recipes vs Components
-- **Components** = Libraries (datasets, models, optimizers, distributed strategies)
-- **Recipes** = Applications (combine components into training workflows)
-- Never make components depend on each other - compose them in recipes
-
-### FSDP2 vs MegatronFSDP
-- **FSDP2**: PyTorch-native fully sharded data parallelism
-- **MegatronFSDP**: Hybrid approach combining Megatron-style model parallelism with FSDP
-- Both live in `components/distributed/`
-
-### Checkpoint Format
-- Uses PyTorch Distributed Checkpoint (DCP) with SafeTensors output
-- Mesh-aware: can merge to HF format or reshard for different topology
-- See `components/checkpoint/` for utilities
-
-### Sequence Packing
-- Available for LLM training via dataset components
-- Significantly improves training throughput
-- Configured in dataset YAML section
-
-### FP8 Training
-- Supported via torchao integration
-- Requires torch.compile-compatible models
-- See examples: `llama3_1_8b_hellaswag_fp8.yaml`
-
-## File Locations for Common Tasks
-
-**Adding a new model:**
-- Register in `nemo_automodel/_transformers/auto_model.py`
-- Custom implementation in `nemo_automodel/components/models/<model_name>/`
-- Recipe example in `examples/llm_finetune/<model_name>/`
-
-**Adding a new dataset:**
-- Implementation in `nemo_automodel/components/datasets/llm/` or `.../vlm/`
-- Example usage in recipe YAML configs
-
-**Modifying distributed strategies:**
-- FSDP2/MegatronFSDP in `nemo_automodel/components/distributed/`
-- Tensor parallel plans in `components/distributed/optimized_tp_plans.py`
-
-**Adding optimizers/schedulers:**
-- `nemo_automodel/components/optim/`
-
-**Custom kernels/loss functions:**
-- `nemo_automodel/components/loss/`
-- `nemo_automodel/components/moe/` (MoE-specific kernels)
+3. **Workflow**:
+   - First: Use LSP to understand code structure and relationships
+   - Second: Use text tools only when LSP cannot help (non-code content)
+   - NEVER read entire large files to find references; use LSP instead

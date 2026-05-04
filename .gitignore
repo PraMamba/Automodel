@@ -184,3 +184,4 @@ slurm*.out
 slurm_jobs/
 skypilot_jobs/
 CLAUDE.md
+.omx/
